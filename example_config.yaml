@@ -1,0 +1,27 @@
+log_file: D:/Projects/monitor/example_log.log
+sites:
+  locallhost:
+    url: http://locallhost.com/
+    schedule: "* * * * *"
+    conditions:
+      status: 200
+      content: Your IP Address
+      regex: \d+-\d+ Tom Anderson
+  onet:
+    url: http://www.onet.pl/
+    schedule: "*/5 * * * *"
+    conditions:
+      status: 200
+      content: 500 plus
+      regex: \d+ Grupa Onet.pl S.A.
+  foobar:
+      url: http://www.foobar.com/login
+      schedule: "*/2 20-22 * * *"
+      conditions:
+        status: 200
+  test:
+      url: http://www.test.be
+      schedule: "* * * * *"
+      conditions:
+        status: 200
+
