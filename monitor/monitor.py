@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import gevent
 import yaml
-from gevent import queue, pool, event
+from gevent import queue, pool, event, lock
 from gevent.wsgi import WSGIServer
 from jinja2 import Environment, PackageLoader
 
@@ -15,6 +15,8 @@ from resource import MonitoredResource
 logger = logging.getLogger('monitor')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s %(url)s %(status)s %(response_code)s %(response_time)s %(message)s')
+
+semaphore_recent_responses = lock.BoundedSemaphore()
 
 
 class Monitor(object):
@@ -30,7 +32,7 @@ class Monitor(object):
 
         # resources
         self.resources = []
-        self.current_responses = OrderedDict()
+        self.recent_responses = OrderedDict()
 
         # environment
         self.env = Environment(loader=PackageLoader('monitor', 'templates'))
@@ -67,7 +69,8 @@ class Monitor(object):
     def _worker(self, resource):
         crawler = Crawler(resource)
         response = crawler.check()
-        self.current_responses[resource] = response
+        with semaphore_recent_responses:
+            self.recent_responses[resource] = response
         logger.info(response.message, extra=response.logger_info)
 
     def _supervisor_job(self):
@@ -99,7 +102,7 @@ class Monitor(object):
     def _report_application(self, environ, start_response):
         status = '200 OK'
         template = self.env.get_template('report.html')
-        body = template.render(responses=self.current_responses)
+        body = template.render(responses=self.recent_responses)
 
         headers = [
             ('Content-Type', 'text/html')
