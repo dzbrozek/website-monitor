@@ -27,7 +27,7 @@
                     <tr>
                         <td><a href="{{ response.resource.url }}" target="_blank">{{ response.resource.url }}</a></td>
                         <td>{{ response.status }}</td>
-                        <td>{{ response.response.status_code }}</td>
+                        <td>{{ response.response.status_code or 'N/A' }}</td>
                         <td>{% if response.duration %}{{ response.duration|round(2) }}s{% else %}N/A{% endif %}</td>
                         <td>{{ response.last_check.strftime('%d/%m/%Y %H:%M') }}</td>
                         <td>{{ response.message or 'N/A' }}</td>

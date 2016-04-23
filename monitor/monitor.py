@@ -14,7 +14,7 @@ from resource import MonitoredResource
 
 logger = logging.getLogger('monitor')
 logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s %(url)s %(status)s %(response_code)s %(response_time).2fs %(message)s')
+formatter = logging.Formatter('%(asctime)s %(url)s %(status)s %(response_code)s %(response_time)s %(message)s')
 
 
 class Monitor(object):
