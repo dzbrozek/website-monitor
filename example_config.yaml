@@ -13,7 +13,6 @@ sites:
     conditions:
       status: 200
       content: 500 plus
-      regex: \d+ Grupa Onet.pl S.A.
   foobar:
       url: http://www.foobar.com/login
       schedule: "*/2 20-22 * * *"
