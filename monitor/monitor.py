@@ -114,7 +114,7 @@ class Monitor(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Simple program that monitors web sites "
                                                  "and reports their availability.")
-    parser.add_argument("--config", dest="config_file", action="store", help="config file")
+    parser.add_argument("--config", dest="config_file", action="store", help="config file", required=True)
     args = parser.parse_args()
 
     monitor = Monitor()
