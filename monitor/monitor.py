@@ -4,13 +4,15 @@ from collections import OrderedDict
 
 import gevent
 import yaml
-from gevent import queue, pool, event, lock
+from gevent import queue, pool, event, lock, monkey
 from gevent.wsgi import WSGIServer
 from jinja2 import Environment, PackageLoader
 
 from crawler import Crawler
 from errors import InvalidConfigError
 from resource import MonitoredResource
+
+monkey.patch_all()
 
 logger = logging.getLogger('monitor')
 logger.setLevel(logging.INFO)
