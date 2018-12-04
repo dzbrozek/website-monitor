@@ -10,7 +10,6 @@ from collections import OrderedDict
 
 from gevent.pywsgi import WSGIServer
 
-
 from jinja2 import Environment, PackageLoader
 
 from crawler import Crawler
@@ -24,7 +23,7 @@ formatter = logging.Formatter('%(asctime)s %(url)s %(status)s %(response_code)s 
 semaphore_recent_responses = lock.BoundedSemaphore()
 
 
-class Monitor(object):
+class Monitor:
 
     def __init__(self):
         # tasks
@@ -53,15 +52,15 @@ class Monitor(object):
             cfg = yaml.load(yml_config)
 
         if not cfg:
-            raise InvalidConfigError(u'Config file is empty.')
+            raise InvalidConfigError('Config file is empty.')
         log_file = cfg.get('log_file')
         if not log_file:
-            raise InvalidConfigError(u'Invalid config file. The "log_file" section is missing.')
+            raise InvalidConfigError('Invalid config file. The "log_file" section is missing.')
         self._set_log_handler(log_file)
 
         sites = cfg.get('sites')
         if not sites:
-            raise InvalidConfigError(u'Invalid config file. The "sites" section is missing.')
+            raise InvalidConfigError('Invalid config file. The "sites" section is missing.')
         for section in sites.values():
             self.resources.append(MonitoredResource(section))
 

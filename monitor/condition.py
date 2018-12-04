@@ -7,7 +7,7 @@ class ConditionType(object):
     STATUS, CONTENT, REGEX = ('status', 'content', 'regex')
 
 
-class ConditionFactory(object):
+class ConditionFactory:
 
     @staticmethod
     def factory(con_type, con_value):
@@ -17,10 +17,10 @@ class ConditionFactory(object):
             return ContentCondition(con_value)
         elif con_type == ConditionType.REGEX:
             return RegexCondition(con_value)
-        raise NotImplementedError(u'{} is not supported condition'.format(con_type))
+        raise NotImplementedError('{} is not supported condition'.format(con_type))
 
 
-class Condition(object):
+class Condition:
 
     def validate(self, response):
         raise NotImplementedError
@@ -33,8 +33,8 @@ class StatusCondition(Condition):
 
     def validate(self, response):
         if response.status_code != self.status_code:
-            raise ConditionError(u"Invalid response code. Response code"
-                                 u" was {} (expected {})".format(response.status_code, self.status_code))
+            raise ConditionError("Invalid response code: {} "
+                                 "(expected {})".format(response.status_code, self.status_code))
 
 
 class ContentCondition(Condition):
@@ -44,7 +44,7 @@ class ContentCondition(Condition):
 
     def validate(self, response):
         if self.content not in response.text:
-            raise ConditionError(u"The string '{0}' hasn't been found.".format(self.content))
+            raise ConditionError("The string hasn't been found.".format(self.content))
 
 
 class RegexCondition(Condition):
@@ -55,4 +55,4 @@ class RegexCondition(Condition):
     def validate(self, response):
         match = self.pattern.search(response.text)
         if not match:
-            raise ConditionError(u"The regex '{0}' hasn't been matched.".format(self.pattern.pattern))
+            raise ConditionError("The regex hasn't been matched.".format(self.pattern))

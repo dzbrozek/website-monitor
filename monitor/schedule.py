@@ -4,7 +4,7 @@ import re
 from errors import InvalidScheduleException
 
 
-class Stack(object):
+class Stack:
 
     def __init__(self):
         self.items = []
@@ -28,7 +28,7 @@ class Stack(object):
         return not self.size()
 
 
-class Matcher(object):
+class Matcher:
     range = None
 
     def __init__(self, expression):
@@ -53,7 +53,7 @@ class Matcher(object):
                         continue
                     self.operand_stack.push(int(char))
                 except (ValueError, TypeError):
-                    raise InvalidScheduleException(u'{} is not a number'.format(char))
+                    raise InvalidScheduleException('{} is not a number'.format(char))
         # special cases
         if self.operator_stack.size() == 0 and self.operand_stack.size() == 1:
             if isinstance(self.operand_stack.first(), int):
@@ -73,7 +73,7 @@ class Matcher(object):
                 self.range_operator(first_operand, second_operand)
 
         if self.operand_stack.size() != 1:
-            raise InvalidScheduleException(u'{} is invalid expression'.format(self.expression))
+            raise InvalidScheduleException('{} is invalid expression'.format(self.expression))
 
         self.valid_range = set(self.range) & set(self.operand_stack.pop())
 
@@ -82,10 +82,11 @@ class Matcher(object):
             first_operand = list(self.range)
         elif isinstance(first_operand, int):
             first_operand = [first_operand]
-        if second_operand == "*":
-            second_operand = list(self.range)
-        elif isinstance(second_operand, int):
+
+        if isinstance(second_operand, int):
             second_operand = [second_operand]
+        else:
+            raise InvalidScheduleException('{} is invalid expression'.format(self.expression))
 
         result = first_operand + second_operand
         self.operand_stack.insert(0, sorted(set(result)))
@@ -95,19 +96,18 @@ class Matcher(object):
             first_operand = list(self.range)
         elif isinstance(first_operand, int):
             first_operand = [first_operand]
+
         if not isinstance(second_operand, int):
-            raise InvalidScheduleException(u'{} is invalid expression'.format(self.expression))
+            raise InvalidScheduleException('{} is invalid expression'.format(self.expression))
 
         result = first_operand + list(range(first_operand[-1], second_operand + 1))
         self.operand_stack.insert(0, sorted(set(result)))
 
     def slash_operator(self, first_operand, second_operand):
-        if first_operand == "*":
-            first_operand = list(self.range)
-        elif isinstance(first_operand, int):
-            first_operand = [first_operand]
-        if not isinstance(second_operand, int):
-            raise InvalidScheduleException(u'{} is invalid expression'.format(self.expression))
+        if first_operand != "*" or not isinstance(second_operand, int):
+            raise InvalidScheduleException('{} is invalid expression'.format(self.expression))
+        first_operand = list(self.range)
+
         result = first_operand[::second_operand]
         self.operand_stack.insert(0, sorted(set(result)))
 
@@ -127,7 +127,7 @@ class HourMatcher(Matcher):
 
 
 class DayMatcher(Matcher):
-    range = range(0, 32)
+    range = range(1, 32)
 
     def is_valid(self):
         return datetime.datetime.now().day in self.valid_range
@@ -147,7 +147,7 @@ class MonthMatcher(Matcher):
         return datetime.datetime.now().month in self.valid_range
 
 
-class Schedule(object):
+class Schedule:
 
     def __init__(self, rules):
         self.rules = rules.strip().split()

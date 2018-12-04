@@ -19,7 +19,7 @@ on their sites.
 **Installation**
 
 The app is using Python 3.6 and Pipenv. 
-If you don't have one of them please install them first.
+If you don't have any of them please meet the requirements first.
 After that move to your project's directory and call the following command:
 
 ```

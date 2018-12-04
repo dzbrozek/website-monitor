@@ -5,11 +5,11 @@ from condition import ConditionFactory
 from schedule import Schedule
 
 
-class ResourceStatus(object):
-    SUCCESS, FAIL = ('Success', 'Fail')
+class ResourceStatus:
+    SUCCESS, FAIL = 'Success', 'Fail'
 
 
-class MonitoredResource(object):
+class MonitoredResource:
 
     def __init__(self, config):
         self.url = None
@@ -20,25 +20,28 @@ class MonitoredResource(object):
 
     def _load_config(self, config):
         if not config:
-            raise InvalidConfigError(u'Invalid config file. The "site" section is missing.')
+            raise InvalidConfigError('Missing config file.')
+
         url = config.get('url')
         if not url:
-            raise InvalidConfigError(u'Invalid config file. The "url" section is missing.')
+            raise InvalidConfigError('Invalid config file. The "url" section is missing.')
         self.url = url
+
         schedule = config.get('schedule')
         if not schedule:
-            raise InvalidConfigError(u'Invalid config file. The "schedule" section is missing.')
+            raise InvalidConfigError('Invalid config file. The "schedule" section is missing.')
         schedule = schedule.strip()
         if len(schedule.split()) != 5:
-            raise InvalidConfigError(u'Invalid config file. {} is an invalid expression for '
-                                     u'the "schedule" section'.format(schedule))
+            raise InvalidConfigError('Invalid config file. "{}" is an invalid expression for '
+                                     'the "schedule" section'.format(schedule))
         self.schedule = Schedule(schedule)
-        conditions = config.get('conditions')
-        if not conditions:
-            raise InvalidConfigError(u'Invalid config file. The "conditions" section is missing.')
+
+        conditions = config.get('conditions', [])
+        if not len(conditions):
+            raise InvalidConfigError('Invalid config file. The "conditions" section is missing.')
         for con_type, con_value in conditions.items():
             if not con_type or not con_value:
-                raise InvalidConfigError(u'Invalid config file. The "conditions" section is invalid.')
+                raise InvalidConfigError('Invalid config file. The "conditions" section is invalid.')
             self.conditions.append(ConditionFactory.factory(con_type, con_value))
 
     def is_ready(self):
@@ -47,7 +50,7 @@ class MonitoredResource(object):
         return False
 
 
-class ResourceResponse(object):
+class ResourceResponse:
 
     def __init__(self, resource, status, response=None, duration=None, message=None):
         self.resource = resource
