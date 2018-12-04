@@ -1,4 +1,8 @@
-Simple program that monitors web sites and reports their availability. This tool is intended as a monitoring tool for web site administrators for detecting problems on their sites.
+### Website monitor ###
+
+Simple program that monitors web sites and reports their availability. 
+This tool is intended as a monitoring tool for web site administrators for detecting problems 
+on their sites.
 
 **Features**:
 
@@ -10,12 +14,41 @@ Simple program that monitors web sites and reports their availability. This tool
     3. **regex** -  checks if the  response content matches appropriate regex
 4. Measures the time it took for the web server to complete the request.
 5. Writes a log file that shows the progress of the program.
-6. Displays recent results in the Web browser (http://127.0.0.1:1080)
+6. Displays recent results in the Web browser (http://127.0.0.1:8000)
 
-**Requirements**
+**Installation**
 
-See requirements.txt for the required Python packages.
+The app is using Python 3.6 and Pipenv. 
+If you don't have one of them please install them first.
+After that move to your project's directory and call the following command:
+
+```
+pipenv install
+```
 
 **Configuration**
 
-You need to pass a configuration file as a parameter to the program. Please see example_config.yaml.
+You need to pass a configuration file as a parameter to the program. 
+Please see `example_config.yaml` to learn more.
+
+
+**Running app**
+
+To start the app run the `monitor.py` script
+
+_Example:_
+
+```
+pipenv run python monitor/monitor.py --config my_config.yaml
+```
+
+To see the recent results open http://127.0.0.1:8000 in your browser.
+
+
+**Running tests**
+
+To run the tests use the following command:
+
+```
+pipenv run pytest
+```

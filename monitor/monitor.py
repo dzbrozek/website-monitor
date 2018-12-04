@@ -1,18 +1,21 @@
+import gevent
+from gevent import queue, pool, event, lock, monkey
+
+monkey.patch_all()
+
+import yaml
 import argparse
 import logging
 from collections import OrderedDict
 
-import gevent
-import yaml
-from gevent import queue, pool, event, lock, monkey
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
+
+
 from jinja2 import Environment, PackageLoader
 
 from crawler import Crawler
 from errors import InvalidConfigError
 from resource import MonitoredResource
-
-monkey.patch_all()
 
 logger = logging.getLogger('monitor')
 logger.setLevel(logging.INFO)
@@ -59,7 +62,7 @@ class Monitor(object):
         sites = cfg.get('sites')
         if not sites:
             raise InvalidConfigError(u'Invalid config file. The "sites" section is missing.')
-        for section in sites.itervalues():
+        for section in sites.values():
             self.resources.append(MonitoredResource(section))
 
         self.scheduler = gevent.spawn(self._scheduler_job)

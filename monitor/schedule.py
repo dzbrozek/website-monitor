@@ -29,6 +29,7 @@ class Stack(object):
 
 
 class Matcher(object):
+    range = None
 
     def __init__(self, expression):
         self.operators = [',', '-', '/']
@@ -97,7 +98,7 @@ class Matcher(object):
         if not isinstance(second_operand, int):
             raise InvalidScheduleException(u'{} is invalid expression'.format(self.expression))
 
-        result = first_operand + range(first_operand[-1], second_operand + 1)
+        result = first_operand + list(range(first_operand[-1], second_operand + 1))
         self.operand_stack.insert(0, sorted(set(result)))
 
     def slash_operator(self, first_operand, second_operand):

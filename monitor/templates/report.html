@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for response in responses.itervalues() %}
+                    {% for response in responses.values() %}
                     <tr>
                         <td><a href="{{ response.resource.url }}" target="_blank">{{ response.resource.url }}</a></td>
                         <td>{{ response.status }}</td>

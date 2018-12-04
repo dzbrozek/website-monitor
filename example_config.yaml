@@ -1,4 +1,4 @@
-log_file: D:/Projects/monitor/example_log.log
+log_file: /home/dazik/Projects/monitor/example_log.log
 sites:
   locallhost:
     url: http://locallhost.com/
@@ -12,7 +12,7 @@ sites:
     schedule: "*/5 * * * *"
     conditions:
       status: 200
-      content: 500 plus
+      content: smog
   foobar:
       url: http://www.foobar.com/login
       schedule: "*/2 20-22 * * *"

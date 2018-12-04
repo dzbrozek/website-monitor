@@ -36,7 +36,7 @@ class MonitoredResource(object):
         conditions = config.get('conditions')
         if not conditions:
             raise InvalidConfigError(u'Invalid config file. The "conditions" section is missing.')
-        for con_type, con_value in conditions.iteritems():
+        for con_type, con_value in conditions.items():
             if not con_type or not con_value:
                 raise InvalidConfigError(u'Invalid config file. The "conditions" section is invalid.')
             self.conditions.append(ConditionFactory.factory(con_type, con_value))
